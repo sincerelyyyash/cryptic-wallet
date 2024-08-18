@@ -1,3 +1,4 @@
+
 import nacl from "tweetnacl";
 import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from "bip39";
 import { derivePath } from "ed25519-hd-key";
@@ -6,7 +7,7 @@ import { ethers } from "ethers";
 import bs58 from "bs58";
 import crypto from "crypto";
 
-const ENCRYPTION_KEY = crypto.randomBytes(32);
+const ENCRYPTION_KEY = Buffer.from(process.env.ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex'), 'hex');
 const ALGORITHM = 'aes-256-cbc';
 const IV_LENGTH = 16;
 
@@ -19,17 +20,17 @@ interface Wallet {
 
 const encrypt = (text: string): string => {
   const iv = crypto.randomBytes(IV_LENGTH);
-  const cipher = crypto.createCipheriv(ALGORITHM, Buffer.from(ENCRYPTION_KEY), iv);
+  const cipher = crypto.createCipheriv(ALGORITHM, ENCRYPTION_KEY, iv);
   let encrypted = cipher.update(text);
   encrypted = Buffer.concat([encrypted, cipher.final()]);
   return iv.toString('hex') + ':' + encrypted.toString('hex');
 };
 
 const decrypt = (text: string): string => {
-  const textParts = text.split(':');
-  const iv = Buffer.from(textParts.shift()!, 'hex');
-  const encryptedText = Buffer.from(textParts.join(':'), 'hex');
-  const decipher = crypto.createDecipheriv(ALGORITHM, Buffer.from(ENCRYPTION_KEY), iv);
+  const [ivHex, encryptedTextHex] = text.split(':');
+  const iv = Buffer.from(ivHex, 'hex');
+  const encryptedText = Buffer.from(encryptedTextHex, 'hex');
+  const decipher = crypto.createDecipheriv(ALGORITHM, ENCRYPTION_KEY, iv);
   let decrypted = decipher.update(encryptedText);
   decrypted = Buffer.concat([decrypted, decipher.final()]);
   return decrypted.toString();
@@ -61,13 +62,13 @@ const generateWalletFromMnemonic = (
     let publicKeyEncoded: string;
     let privateKeyEncoded: string;
 
-    if (pathType === "501") {
+    if (pathType === "501") { // Solana
       const { secretKey } = nacl.sign.keyPair.fromSeed(derivedSeed);
       const keypair = Keypair.fromSecretKey(secretKey);
 
       privateKeyEncoded = encrypt(bs58.encode(secretKey));
       publicKeyEncoded = keypair.publicKey.toBase58();
-    } else if (pathType === "60" || pathType === "137") {
+    } else if (pathType === "60" || pathType === "137") { // Ethereum or Polygon
       const privateKey = Buffer.from(derivedSeed).toString("hex");
       privateKeyEncoded = encrypt(privateKey);
 
@@ -89,4 +90,6 @@ const generateWalletFromMnemonic = (
     return null;
   }
 };
+
+export { createMnemonic, isValidMnemonic, generateWalletFromMnemonic };
 
