@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Appbar from "@/components/Appbar";
 import { Toaster } from "@/components/ui/toaster";
+import { Montserrat } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  weight: ["100", "200", "300", "400", "500", "600"]
+})
 
 export const metadata: Metadata = {
   title: "Cryptic Wallet",
@@ -19,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={montserrat.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
