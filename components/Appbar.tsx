@@ -1,26 +1,37 @@
 
-import { ModeToggle } from './theme-toggle'
+import { ModeToggle } from './theme-toggle';
 
 function Appbar() {
   return (
-    <div className='flex flex-row justify-between mx-4 mb-4 w-full'>
-      <div className="text-2xl md:text-3xl font-bold flex flex-row items-center gap-2">
+    <div className="flex flex-row justify-between items-center px-4 py-2 w-full">
+      <div className="text-xl md:text-3xl font-bold flex flex-row items-center gap-2">
         <Logo />
-        Cryptic
+        <span className="hidden sm:inline">Cryptic</span>
       </div>
       <div>
         <ModeToggle />
       </div>
     </div>
-  )
+  );
 }
 
 function Logo() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" className="h-6 w-6 md:h-8 md:w-8 bg-blue-500 p-1 rounded-full">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3" />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth="1.5"
+      stroke="white"
+      className="h-6 w-6 md:h-8 md:w-8 bg-blue-500 p-1 rounded-full"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3"
+      />
     </svg>
-  )
+  );
 }
 
 export default Appbar;
