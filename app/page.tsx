@@ -1,9 +1,9 @@
-import { Onboard } from "@/components/Onboarding";
+import { WalletHome } from "@/components/HomeView";
 
 export default function Home() {
   return (
     <div>
-      <Onboard />
+      <WalletHome />
     </div>
   );
 }
