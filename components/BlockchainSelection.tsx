@@ -2,6 +2,7 @@
 "use client";
 
 import { FC } from 'react';
+import Image from 'next/image';
 import { Button } from './ui/button';
 
 const blockchainOptions = [
@@ -26,7 +27,7 @@ export const BlockchainSelectionPhase: FC<BlockchainSelectionPhaseProps> = ({ on
             className="w-full md:w-48 h-12 hover:bg-gray-100 text-md dark:hover:bg-gray-300 border bg-white text-black flex items-center gap-2 justify-center"
             onClick={() => onBlockchainSelect(option.pathType)}
           >
-            <img src={option.icon} alt={option.label} className="h-6 w-6" />
+            <Image src={option.icon} alt={option.label} className="h-6 w-6" width={24} height={24} /> {/* Replaced <img> with <Image> */}
             {option.label}
           </Button>
         ))}
@@ -34,3 +35,4 @@ export const BlockchainSelectionPhase: FC<BlockchainSelectionPhaseProps> = ({ on
     </div>
   );
 };
+

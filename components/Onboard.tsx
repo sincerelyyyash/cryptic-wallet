@@ -14,7 +14,7 @@ export const Onboard: FC<InitialPhaseProps> = ({ onCreateWallet, onImportWallet 
     <div className="flex flex-col gap-4 items-center text-center max-w-lg">
       <Logo />
       <h1 className="font-medium text-3xl md:text-5xl">Welcome to Cryptic</h1>
-      <h3 className="font-medium text-xl md:text-2xl">Let's get started.</h3>
+      <h3 className="font-medium text-xl md:text-2xl">Let&apos;s get started.</h3>
       <div className="flex flex-col gap-4 mt-8 md:mt-12">
         <Button className="w-full md:w-48 h-12 text-md" onClick={onCreateWallet}>
           Create a new Wallet
