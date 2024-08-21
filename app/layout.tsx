@@ -4,6 +4,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Appbar from "@/components/Appbar";
 import { Toaster } from "@/components/ui/toaster";
 import { Montserrat } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react"
+
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -24,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={montserrat.className}>
+        <Analytics />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
