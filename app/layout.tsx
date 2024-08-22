@@ -5,6 +5,7 @@ import Appbar from "@/components/Appbar";
 import { Toaster } from "@/components/ui/toaster";
 import { Montserrat } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react"
+import Footer from "@/components/Footer";
 
 
 const montserrat = Montserrat({
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
   title: "Cryptic Wallet",
   description: "Web based HD crypto wallet",
 };
+
 
 export default function RootLayout({
   children,
@@ -33,12 +35,20 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="relative flex items-center justify-center flex-col px-4 sm:px-6 lg:px-8 mt-10 w-full max-w-7xl mx-auto">
-            <Appbar />
-            <div className="mt-10 w-full">
+          <div className="flex flex-col min-h-screen">
+            <header className="flex-none w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <Appbar />
+            </header>
+
+            <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
               {children}
-            </div>
+            </main>
+
+            <footer className="flex-none w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+              <Footer />
+            </footer>
           </div>
+
           <Toaster />
         </ThemeProvider>
       </body>
