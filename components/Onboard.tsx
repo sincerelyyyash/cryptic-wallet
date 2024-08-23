@@ -19,9 +19,9 @@ export const Onboard: FC<InitialPhaseProps> = ({ onCreateWallet, onImportWallet 
         <Button className="w-full md:w-48 h-12 text-md" onClick={onCreateWallet}>
           Create a new Wallet
         </Button>
-        {/* <Button className="w-full md:w-48 h-12 text-md bg-gray-900 text-white hover:text-black" onClick={onImportWallet}> */}
-        {/*   Import Wallet */}
-        {/* </Button> */}
+        <Button className="w-full md:w-48 h-12 text-md bg-gray-900 text-white hover:text-black" onClick={onImportWallet}>
+          Import Wallet
+        </Button>
       </div>
     </div>
   );

@@ -4,16 +4,16 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { createMnemonic, generateWalletFromMnemonic } from "@/utils/generateWallet";
+import { generateWalletFromMnemonic } from "@/utils/generateWallet";
 import { Onboard } from "./Onboard";
-import { BlockchainSelectionPhase } from "./BlockchainSelection";
-import { MnemonicView } from "./MnemonicView";
+import { MnemonicInputView } from "./MnemonicInput";
 import { WalletView } from "./WalletView";
 import { motion } from "framer-motion";
 
+const NUMBER_OF_ACCOUNTS = 5;
+
 export function WalletHome() {
-  const [stage, setStage] = useState<"initial" | "selectBlockchain" | "showMnemonic" | "walletsList">("initial");
-  const [selectedBlockchain, setSelectedBlockchain] = useState<string | null>(null);
+  const [stage, setStage] = useState<"initial" | "mnemonicInput" | "walletsList">("initial");
   const [mnemonic, setMnemonic] = useState<string | null>(null);
   const [wallets, setWallets] = useState<any[]>([]);
   const [walletIndex, setWalletIndex] = useState<number>(0);
@@ -41,25 +41,47 @@ export function WalletHome() {
   };
 
   const handleCreateWallet = () => {
-    setStage("selectBlockchain");
+    setStage("mnemonicInput");
   };
 
-  const handleBlockchainSelection = (pathType: string) => {
-    const newMnemonic = createMnemonic();
-    setMnemonic(newMnemonic);
-    setSelectedBlockchain(pathType);
-    const initialWallet = generateWalletFromMnemonic(pathType, newMnemonic, 0);
-    if (initialWallet) {
-      setWallets([initialWallet]);
+  const handleImportWallet = () => {
+    setStage("mnemonicInput");
+  };
+
+  const handleMnemonicImport = (mnemonicInput: string) => {
+    if (!mnemonicInput) {
+      toast({
+        title: "Invalid mnemonic",
+        description: "Mnemonic cannot be empty.",
+      });
+      return;
+    }
+
+    const generatedWallets = [];
+    for (let i = 0; i < NUMBER_OF_ACCOUNTS; i++) {
+      const newWallet = generateWalletFromMnemonic("501", mnemonicInput, i);
+      if (newWallet) {
+        generatedWallets.push(newWallet);
+      }
+    }
+
+    if (generatedWallets.length > 0) {
+      setWallets(generatedWallets);
+      setMnemonic(mnemonicInput);
       setWalletIndex(0);
-      setStage("showMnemonic");
+      setStage("walletsList");
+    } else {
+      toast({
+        title: "Failed to import wallets",
+        description: "Please check your mnemonic and try again.",
+      });
     }
   };
 
   const handleAddWallet = () => {
-    if (mnemonic && selectedBlockchain) {
+    if (mnemonic) {
       const newWalletIndex = walletIndex + 1;
-      const newWallet = generateWalletFromMnemonic(selectedBlockchain, mnemonic, newWalletIndex);
+      const newWallet = generateWalletFromMnemonic("501", mnemonic, newWalletIndex);
       if (newWallet) {
         setWallets((prevWallets) => [...prevWallets, newWallet]);
         setWalletIndex(newWalletIndex);
@@ -72,10 +94,6 @@ export function WalletHome() {
         });
       }
     }
-  };
-
-  const handleImportWallet = () => {
-    // Implement Import Wallet functionality
   };
 
   const copyToClipboard = (content: string) => {
@@ -139,7 +157,7 @@ export function WalletHome() {
         </motion.div>
       )}
 
-      {stage === "selectBlockchain" && (
+      {stage === "mnemonicInput" && (
         <motion.div
           initial="hidden"
           animate="visible"
@@ -147,24 +165,8 @@ export function WalletHome() {
           variants={animationVariants}
           transition={{ duration: 0.5, ease: "easeInOut" }}
         >
-          <BlockchainSelectionPhase
-            onBlockchainSelect={handleBlockchainSelection}
-          />
-        </motion.div>
-      )}
-
-      {stage === "showMnemonic" && mnemonic && (
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          variants={animationVariants}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
-        >
-          <MnemonicView
-            mnemonicWords={mnemonic.split(' ')}
-            onProceed={() => setStage("walletsList")}
-            copyToClipboard={copyToClipboard}
+          <MnemonicInputView
+            onMnemonicSubmit={handleMnemonicImport}
           />
         </motion.div>
       )}
